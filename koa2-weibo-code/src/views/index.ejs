@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>EJS Welcome to <%= title %></p>
+    <p>EJS Welcome to <%= locals.name %></p>
+    <%- include('weigets/user-info',{ isMe })%> <%-
+    include('weigets/blog-list',{ blogList })%>
+  </body>
+</html>
