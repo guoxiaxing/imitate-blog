@@ -1,9 +1,15 @@
 const router = require("koa-router")();
 
 router.get("/", async (ctx, next) => {
+  const session = ctx.session;
+  if (session.viewNum == null) {
+    session.viewNum = 0;
+  }
+  session.viewNum++;
   await ctx.render("index", {
     title: "Hello Koa 2!",
     isMe: true,
+    viewNum: session.viewNum,
     blogList: [
       {
         id: 1,

@@ -5,6 +5,9 @@ const json = require("koa-json");
 const onerror = require("koa-onerror");
 const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
+const session = require("koa-generic-session");
+const redisStore = require("koa-redis");
+const { REDIS_CONF } = require("./conf/db");
 
 const index = require("./routes/index");
 const users = require("./routes/users");
@@ -37,6 +40,25 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start;
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
+
+// session 配置 需要在route之前进行配置
+
+app.keys = ["GXX_19970521_**"];
+
+app.use(
+  session({
+    key: "weibo.id", // 也就是cookie的key  默认是koa.id
+    prefix: "weibo:sess:", //redis key的前缀 默认是 koa:sess:
+    cookie: {
+      path: "/",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // 单位ms
+    },
+    store: redisStore({
+      all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+    })
+  })
+);
 
 // routes
 app.use(index.routes(), index.allowedMethods());
