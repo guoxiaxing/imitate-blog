@@ -6,24 +6,41 @@ router.get('/', async (ctx, next) => {
     session.viewNum = 0;
   }
   session.viewNum++;
+
   await ctx.render('index', {
     title: 'Hello Koa 2!',
-    isMe: true,
-    viewNum: session.viewNum,
-    blogList: [
-      {
-        id: 1,
-        title: 'aaa'
+    userData: {
+      userInfo: {},
+      fansData: {
+        count: 0,
+        list: []
       },
-      {
-        id: 2,
-        title: 'bbb'
+      followersData: {
+        count: 0,
+        list: []
       },
-      {
-        id: 3,
-        title: 'ccc'
-      }
-    ]
+      atCount: 0
+    },
+    blogData: {
+      isEmpty: true,
+      blogList: [
+        {
+          id: 1,
+          title: 'aaa'
+        },
+        {
+          id: 2,
+          title: 'bbb'
+        },
+        {
+          id: 3,
+          title: 'ccc'
+        }
+      ],
+      pageSize: 10,
+      pageIndex: 1,
+      count: 100
+    }
   });
 });
 

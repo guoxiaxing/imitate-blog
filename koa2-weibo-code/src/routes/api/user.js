@@ -3,7 +3,7 @@
  * @author guoxiaxing
  */
 const router = require('koa-router')();
-const { isExist, register } = require('../../controller/user');
+const { isExist, register, login } = require('../../controller/user');
 const userValidate = require('../../validator/user');
 const { getValidator } = require('../../middlewares/validator');
 
@@ -21,8 +21,14 @@ router.post('/register', getValidator(userValidate), async (ctx, next) => {
 router.post('/isExist', async (ctx, next) => {
   const { userName } = ctx.request.body;
   ctx.body = await isExist(userName);
-  console.log('body   ', await isExist(userName));
   return ctx.body;
+});
+
+// 登陆路由
+
+router.post('/login', getValidator(userValidate), async (ctx, next) => {
+  const { userName, password } = ctx.request.body;
+  ctx.body = await login(ctx, userName, password);
 });
 
 module.exports = router;
