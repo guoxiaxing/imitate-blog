@@ -22,12 +22,11 @@ async function getUserInfo(userName, password) {
   }
   // 查询
 
-  const result = User.findOne({
+  const result = await User.findOne({
     // attributes 不写则查出user模型的所有列
     attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
     where: whereOpt
   });
-
   if (result === null) {
     // 未找到
     return result;
@@ -37,6 +36,29 @@ async function getUserInfo(userName, password) {
   return formatUser(result.dataValues);
 }
 
+/**
+ * 创建用户
+ * @param {userName} 用户名
+ * @param {password} 密码
+ * @param {gender} 性别
+ * @param {nickName} 昵称
+ */
+async function createUser({
+  userName,
+  password,
+  gender = 3,
+  nickName = userName
+}) {
+  const result = await User.create({
+    userName,
+    password,
+    nickName,
+    gender
+  });
+  return result.dataValues;
+}
+
 module.exports = {
-  getUserInfo
+  getUserInfo,
+  createUser
 };
