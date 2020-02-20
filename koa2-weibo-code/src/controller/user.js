@@ -3,17 +3,17 @@
  * @author guoxiaxing
  */
 
-const { getUserInfo, createUser } = require("../services/user");
+const { getUserInfo, createUser } = require('../services/user');
 
-const { SuccessModel, ErrorModel } = require("../model/ResModel");
+const { SuccessModel, ErrorModel } = require('../model/ResModel');
 
-const doCrypto = require("../util/cryp");
+const doCrypto = require('../util/cryp');
 
 const {
   registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   registerFailInfo
-} = require("../model/ErrorMessage");
+} = require('../model/ErrorMessage');
 /**
  * 用户名是否存在
  * @param {string} userName  用户名
