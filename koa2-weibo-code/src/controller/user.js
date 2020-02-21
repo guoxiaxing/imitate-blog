@@ -3,7 +3,7 @@
  * @author guoxiaxing
  */
 
-const { getUserInfo, createUser } = require('../services/user');
+const { getUserInfo, createUser, deleteUser } = require('../services/user');
 
 const { SuccessModel, ErrorModel } = require('../model/ResModel');
 
@@ -13,7 +13,8 @@ const {
   registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   registerFailInfo,
-  loginFailInfo
+  loginFailInfo,
+  deleteUserFailInfo
 } = require('../model/ErrorMessage');
 /**
  * 用户名是否存在
@@ -69,8 +70,21 @@ async function login(ctx, userName, password) {
   return new SuccessModel();
 }
 
+/**
+ * 删除当前用户
+ * @param {string}  userName 用户名
+ */
+async function del(userName) {
+  const result = await deleteUser(userName);
+  if (!result) {
+    return new ErrorModel(deleteUserFailInfo);
+  }
+  return new SuccessModel();
+}
+
 module.exports = {
   isExist,
   register,
-  login
+  login,
+  del
 };
