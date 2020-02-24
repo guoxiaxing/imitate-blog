@@ -3,7 +3,12 @@
  * @author guoxiaxing
  */
 
-const { getUserInfo, createUser, deleteUser } = require('../services/user');
+const {
+  getUserInfo,
+  createUser,
+  deleteUser,
+  updateUser
+} = require('../services/user');
 
 const { SuccessModel, ErrorModel } = require('../model/ResModel');
 
@@ -14,7 +19,8 @@ const {
   registerUserNameExistInfo,
   registerFailInfo,
   loginFailInfo,
-  deleteUserFailInfo
+  deleteUserFailInfo,
+  changeInfoFailInfo
 } = require('../model/ErrorMessage');
 /**
  * 用户名是否存在
@@ -82,9 +88,37 @@ async function del(userName) {
   return new SuccessModel();
 }
 
+/**
+ * 注册
+ * @param {Object} ctx 为了修改session
+ * @param {string} nickName 昵称
+ * @param {string}  city 城市
+ * @param {number} picture 图片
+ */
+async function changeInfo(ctx, { nickName, city, picture }) {
+  const { userName } = ctx.session.userInfo;
+  if (!nickName) {
+    nickName = userName;
+  }
+  const result = await updateUser(
+    { newNickName: nickName, newCity: city, newPicture: picture },
+    { userName }
+  );
+  if (result) {
+    Object.assign(ctx.session.userInfo, {
+      nickName,
+      city,
+      picture
+    });
+    return new SuccessModel();
+  }
+  return new ErrorModel(changeInfoFailInfo);
+}
+
 module.exports = {
   isExist,
   register,
   login,
-  del
+  del,
+  changeInfo
 };

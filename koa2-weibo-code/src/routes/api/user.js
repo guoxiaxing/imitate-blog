@@ -3,7 +3,13 @@
  * @author guoxiaxing
  */
 const router = require('koa-router')();
-const { isExist, register, login, del } = require('../../controller/user');
+const {
+  isExist,
+  register,
+  login,
+  del,
+  changeInfo
+} = require('../../controller/user');
 const userValidate = require('../../validator/user');
 const { getValidator } = require('../../middlewares/validator');
 const { loginCheck } = require('../../middlewares/loginCheck');
@@ -38,5 +44,17 @@ router.post('/delete', loginCheck, async (ctx, next) => {
   const { userName } = ctx.session.userInfo;
   ctx.body = await del(userName);
 });
+
+// 修改用户信息路由
+
+router.patch(
+  '/changeInfo',
+  loginCheck,
+  getValidator(userValidate),
+  async (ctx, next) => {
+    const { nickName, city, picture } = ctx.request.body;
+    ctx.body = await changeInfo(ctx, { nickName, city, picture });
+  }
+);
 
 module.exports = router;
