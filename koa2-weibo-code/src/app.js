@@ -1,4 +1,5 @@
 const Koa = require('koa');
+const path = require('path');
 const app = new Koa();
 const views = require('koa-views');
 const json = require('koa-json');
@@ -7,11 +8,13 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
+const koaStatic = require('koa-static');
 const { REDIS_CONF } = require('./conf/db');
 
 const index = require('./routes/index');
 const user = require('./routes/view/user');
 const userAPIRouter = require('./routes/api/user');
+const utilsAPIRouter = require('./routes/api/utils');
 const errorRoute = require('./routes/view/error');
 
 // error handler
@@ -30,7 +33,8 @@ app.use(json());
 app.use(logger());
 // 将我们的根目录设置到public下，也就是访问public/stylesheets/style.css可以通过以下地址直接访问
 // http://localhost:3000/stylesheets/style.css
-app.use(require('koa-static')(__dirname + '/public'));
+app.use(koaStatic(__dirname + '/public'));
+app.use(koaStatic(path.join(__dirname, '..', 'uploadFiles')));
 
 app.use(
   views(__dirname + '/views', {
@@ -69,6 +73,7 @@ app.use(
 app.use(index.routes(), index.allowedMethods());
 app.use(user.routes(), user.allowedMethods());
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods());
+app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods());
 app.use(errorRoute.routes(), errorRoute.allowedMethods());
 
 // error-handling
