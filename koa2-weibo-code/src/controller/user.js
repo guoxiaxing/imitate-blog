@@ -20,7 +20,8 @@ const {
   registerFailInfo,
   loginFailInfo,
   deleteUserFailInfo,
-  changeInfoFailInfo
+  changeInfoFailInfo,
+  changePasswordFailInfo
 } = require('../model/ErrorMessage');
 /**
  * 用户名是否存在
@@ -89,7 +90,7 @@ async function del(userName) {
 }
 
 /**
- * 注册
+ * 修改用户信息
  * @param {Object} ctx 为了修改session
  * @param {string} nickName 昵称
  * @param {string}  city 城市
@@ -115,10 +116,40 @@ async function changeInfo(ctx, { nickName, city, picture }) {
   return new ErrorModel(changeInfoFailInfo);
 }
 
+/**
+ * 修改密码
+ * @param {Object} ctx 为了修改session
+ * @param {string} nickName 昵称
+ * @param {string}  city 城市
+ * @param {number} picture 图片
+ */
+async function changePassword(ctx, password, newPassword) {
+  const { userName } = ctx.session.userInfo;
+  const result = await updateUser(
+    { newPassword: doCrypto(newPassword) },
+    { userName, password: doCrypto(password) }
+  );
+  if (result) {
+    return new SuccessModel();
+  }
+  return new ErrorModel(changePasswordFailInfo);
+}
+
+/**
+ * 退出登陆 只需要删除session即可
+ * @param {Object} ctx 为了修改session
+ */
+async function logout(ctx) {
+  delete ctx.session.userInfo;
+  return new SuccessModel();
+}
+
 module.exports = {
   isExist,
   register,
   login,
   del,
-  changeInfo
+  changeInfo,
+  changePassword,
+  logout
 };

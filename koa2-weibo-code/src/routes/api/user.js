@@ -8,7 +8,9 @@ const {
   register,
   login,
   del,
-  changeInfo
+  changeInfo,
+  changePassword,
+  logout
 } = require('../../controller/user');
 const userValidate = require('../../validator/user');
 const { getValidator } = require('../../middlewares/validator');
@@ -56,5 +58,23 @@ router.patch(
     ctx.body = await changeInfo(ctx, { nickName, city, picture });
   }
 );
+
+// 修改密码路由
+
+router.patch(
+  '/changePassword',
+  loginCheck,
+  getValidator(userValidate),
+  async (ctx, next) => {
+    const { password, newPassword } = ctx.request.body;
+    ctx.body = await changePassword(ctx, password, newPassword);
+  }
+);
+
+// 退出登录路由
+
+router.post('/logout', loginCheck, async (ctx, next) => {
+  ctx.body = await logout(ctx);
+});
 
 module.exports = router;
