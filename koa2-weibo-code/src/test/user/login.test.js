@@ -64,10 +64,44 @@ test('登陆注册一个用户 应该成功', async () => {
   COOKIE = res.headers['set-cookie'].join(';');
 });
 
+// 修改基本信息 应该成功
+
+test('修改基本信息 应该成功', async () => {
+  const res = await server
+    .patch('/api/user/changeInfo')
+    .send({
+      nickName: 'test name',
+      city: 'test city',
+      picture: 'test.png'
+    })
+    .set('cookie', COOKIE);
+  expect(res.body.errno).toBe(0);
+});
+
+// 修改密码 应该成功
+
+test('修改密码 应该成功', async () => {
+  const res = await server
+    .patch('/api/user/changePassword')
+    .send({
+      password,
+      newPassword: `${Date.now()}_hahaha`
+    })
+    .set('cookie', COOKIE);
+  expect(res.body.errno).toBe(0);
+});
+
 // 删除
 
 test('删除注册一个用户 应该成功', async () => {
   const res = await server.post('/api/user/delete').set('cookie', COOKIE);
+  expect(res.body.errno).toBe(0);
+});
+
+// 退出登陆
+
+test('退出登陆  应该成功', async () => {
+  const res = await server.post('/api/user/logout').set('cookie', COOKIE);
   expect(res.body.errno).toBe(0);
 });
 

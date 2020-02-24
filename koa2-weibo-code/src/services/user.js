@@ -72,8 +72,50 @@ async function deleteUser(userName) {
   return result > 0;
 }
 
+/**
+ * 更新用户
+ * @param {userName} 用户名
+ * @param {password} 密码
+ * @param {city} 城市
+ * @param {nickName} 昵称
+ */
+async function updateUser(
+  { newPassword, newNickName, newPicture, newCity },
+  { userName, password }
+) {
+  // 拼接修改内容
+  const updateData = {};
+  if (newPassword) {
+    updateData.password = newPassword;
+  }
+  if (newNickName) {
+    updateData.nickName = newNickName;
+  }
+  if (newCity) {
+    updateData.city = newCity;
+  }
+  if (newPicture) {
+    updateData.picture = newPicture;
+  }
+  // 拼接查询条件
+
+  const whereOpt = {
+    userName
+  };
+  if (password) {
+    whereOpt.password = password;
+  }
+
+  // 执行修改
+  const result = await User.update(updateData, {
+    where: whereOpt
+  });
+  return result[0] > 0;
+}
+
 module.exports = {
   getUserInfo,
   createUser,
-  deleteUser
+  deleteUser,
+  updateUser
 };

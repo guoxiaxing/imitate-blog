@@ -3,7 +3,15 @@
  * @author guoxiaxing
  */
 const router = require('koa-router')();
-const { isExist, register, login, del } = require('../../controller/user');
+const {
+  isExist,
+  register,
+  login,
+  del,
+  changeInfo,
+  changePassword,
+  logout
+} = require('../../controller/user');
 const userValidate = require('../../validator/user');
 const { getValidator } = require('../../middlewares/validator');
 const { loginCheck } = require('../../middlewares/loginCheck');
@@ -37,6 +45,36 @@ router.post('/login', getValidator(userValidate), async (ctx, next) => {
 router.post('/delete', loginCheck, async (ctx, next) => {
   const { userName } = ctx.session.userInfo;
   ctx.body = await del(userName);
+});
+
+// 修改用户信息路由
+
+router.patch(
+  '/changeInfo',
+  loginCheck,
+  getValidator(userValidate),
+  async (ctx, next) => {
+    const { nickName, city, picture } = ctx.request.body;
+    ctx.body = await changeInfo(ctx, { nickName, city, picture });
+  }
+);
+
+// 修改密码路由
+
+router.patch(
+  '/changePassword',
+  loginCheck,
+  getValidator(userValidate),
+  async (ctx, next) => {
+    const { password, newPassword } = ctx.request.body;
+    ctx.body = await changePassword(ctx, password, newPassword);
+  }
+);
+
+// 退出登录路由
+
+router.post('/logout', loginCheck, async (ctx, next) => {
+  ctx.body = await logout(ctx);
 });
 
 module.exports = router;
