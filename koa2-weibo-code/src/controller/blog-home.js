@@ -14,7 +14,7 @@ async function create({ content, image, userId }) {
   try {
     // 创建微博
     const blog = await createBlog({ userId, content, image });
-    return new SuccessModel();
+    return new SuccessModel(blog);
   } catch (e) {
     console.error(e.message);
     return new ErrorModel(createBlogFailInfo);
