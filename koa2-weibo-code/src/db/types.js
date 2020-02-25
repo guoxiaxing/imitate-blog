@@ -5,5 +5,6 @@ module.exports = {
   DECIMAL: sequelize.DECIMAL,
   TEXT: sequelize.TEXT,
   BOOLEAN: sequelize.BOOLEAN,
-  INTEGER: sequelize.INTEGER
+  INTEGER: sequelize.INTEGER,
+  VARCHAR: sequelize.VARCHAR
 };
