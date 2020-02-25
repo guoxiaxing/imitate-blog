@@ -13,6 +13,9 @@ router.prefix('/api/utils');
 
 router.post('/upload', loginCheck, koaForm(), async (ctx, next) => {
   const file = ctx.req.files['file'];
+  if (!file) {
+    return;
+  }
   const { size, type, path, name } = file;
   ctx.body = await saveFile({ size, type, filePath: path, name });
 });
