@@ -13,7 +13,7 @@ router.prefix('/api/profile');
 // 加载更多
 
 router.get('/loadMore/:userName/:pageIndex', loginCheck, async (ctx, next) => {
-  const { userName, pageIndex } = ctx.params;
+  let { userName, pageIndex } = ctx.params;
   pageIndex = parseInt(pageIndex);
   const result = await getProfileBlogList(userName, pageIndex);
 
