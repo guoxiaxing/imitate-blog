@@ -11,6 +11,8 @@ const { isExist } = require('../../controller/user');
 
 const { getSquareBlogList } = require('../../controller/blog-square');
 
+const { getFans } = require('../../controller/user-relation');
+
 router.get('/', loginRedirect, async (ctx, next) => {
   // 首页渲染
   await ctx.render('index', {});
@@ -41,12 +43,15 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
   }
   const result = await getProfileBlogList(curUserName, 0);
   const { isEmpty, blogList, pageSize, pageIndex, count } = result.data;
+
+  const fansResult = await getFans(curUserInfo.id);
+  const { fansCount, fansList } = fansResult.data;
   await ctx.render('profile', {
     blogData: { isEmpty, blogList, pageSize, pageIndex, count },
     userData: {
       userInfo: curUserInfo,
       isMe,
-      fansData: { count: 0, list: [] },
+      fansData: { count: fansCount, list: fansList },
       followersData: { count: 0, list: [] }
     }
   });
