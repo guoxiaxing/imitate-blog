@@ -30,6 +30,37 @@ async function getUserByFollwers(followerId) {
   };
 }
 
+/**
+ * 添加关注
+ * @param {number} userId
+ * @param {number} followerId
+ */
+async function addFollower(userId, followerId) {
+  const result = await UserRelation.create({
+    userId,
+    followerId
+  });
+  return result.dataValues;
+}
+
+/**
+ * 取消关注
+ * @param {number} userId
+ * @param {number} followerId
+ */
+async function deleteFollower(userId, followerId) {
+  const result = await UserRelation.destroy({
+    where: {
+      userId,
+      followerId
+    }
+  });
+  console.log('delete', result);
+  return result > 0;
+}
+
 module.exports = {
-  getUserByFollwers
+  getUserByFollwers,
+  addFollower,
+  deleteFollower
 };

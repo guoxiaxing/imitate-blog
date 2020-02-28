@@ -46,12 +46,15 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
 
   const fansResult = await getFans(curUserInfo.id);
   const { fansCount, fansList } = fansResult.data;
+
+  const amIFollowed = fansList.some(item => item.userName === myUserName);
   await ctx.render('profile', {
     blogData: { isEmpty, blogList, pageSize, pageIndex, count },
     userData: {
       userInfo: curUserInfo,
       isMe,
       fansData: { count: fansCount, list: fansList },
+      amIFollowed,
       followersData: { count: 0, list: [] }
     }
   });
