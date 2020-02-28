@@ -4,14 +4,14 @@
  */
 
 const server = require('../server');
-const { COOKIE, USERNAME } = require('../testUserInfo');
+const { Z_COOKIE, Z_USERNAME } = require('../testUserInfo');
 
 // 加载数据 应该成功
 
 test('加载数据 应该成功', async () => {
   const res = await server
-    .get(`/api/profile/loadMore/${USERNAME}/0`)
-    .set('Cookie', COOKIE);
+    .get(`/api/profile/loadMore/${Z_USERNAME}/0`)
+    .set('Cookie', Z_COOKIE);
   expect(res.body.errno).toBe(0);
   const data = res.body.data;
   expect(data).toHaveProperty('blogList');
