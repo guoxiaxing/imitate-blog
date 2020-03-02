@@ -30,7 +30,7 @@ test('添加关注，张三关注李四，应该成功', async () => {
   const result = server
     .post('/api/profile/follow')
     .send({
-      userId: L_ID
+      userId: 2
     })
     .set('cookie', Z_COOKIE);
   console.log('添加关注，张三关注李四，应该成功', result.body);
@@ -57,11 +57,22 @@ test('获取张三关注人，应该有李四', async () => {
   expect(hasFollowersName).toBe(true);
 });
 
+// 获取 at 列表
+test('获取张三的 at 列表，应该有李四', async () => {
+  const res = await server.get('/api/user/getAtList').set('cookie', Z_COOKIE);
+  const atList = res.body;
+  const hasUserName = atList.some(item => {
+    // '昵称 - userName'
+    return item.indexOf(`- ${L_USERNAME}`) > 0;
+  });
+  expect(hasUserName).toBe(true);
+});
+
 test('张三取消关注李四，应该成功', async () => {
   const result = server
     .post('/api/profile/unFollow')
     .send({
-      userId: L_ID
+      userId: 2
     })
     .set('cookie', Z_COOKIE);
   console.log('张三取消关注李四，应该成功', result.body);
