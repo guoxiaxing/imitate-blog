@@ -13,9 +13,49 @@ const { getSquareBlogList } = require('../../controller/blog-square');
 
 const { getFans, getFollowers } = require('../../controller/user-relation');
 
+const { getHomeBlogList } = require('../../controller/blog-home');
+
 router.get('/', loginRedirect, async (ctx, next) => {
-  // 首页渲染
-  await ctx.render('index', {});
+  const userInfo = ctx.session.userInfo;
+  const { id: userId } = userInfo;
+
+  // 获取第一页数据
+  const result = await getHomeBlogList(userId);
+  const { isEmpty, blogList, pageSize, pageIndex, count } = result.data;
+
+  // 获取粉丝
+  const fansResult = await getFans(userId);
+  const { fansCount, fansList } = fansResult.data;
+
+  // 获取关注人列表
+  const followersResult = await getFollowers(userId);
+  const { followersCount, followersList } = followersResult.data;
+
+  // 获取 @ 数量
+  // const atCountResult = await getAtMeCount(userId);
+  // const { count: atCount } = atCountResult.data;
+
+  await ctx.render('index', {
+    userData: {
+      userInfo,
+      fansData: {
+        count: fansCount,
+        list: fansList
+      },
+      followersData: {
+        count: followersCount,
+        list: followersList
+      },
+      atCount: 0
+    },
+    blogData: {
+      isEmpty,
+      blogList,
+      pageSize,
+      pageIndex,
+      count
+    }
+  });
 });
 
 // 个人主页
