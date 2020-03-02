@@ -3,7 +3,7 @@
  * @author guoxiaxing
  */
 
-const { Blog, User } = require('../db/model/index');
+const { Blog, User, UserRelation } = require('../db/model/index');
 const { formatUser, formatBlog } = require('./_format');
 
 /**
