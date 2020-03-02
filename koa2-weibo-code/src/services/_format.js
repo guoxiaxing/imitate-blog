@@ -2,7 +2,7 @@
  * @description 数据格式化
  * @author guoxiaxing
  */
-const { DEFAULT_PICTURE } = require('../conf/const');
+const { DEFAULT_PICTURE, REG_FOR_AT_WHO } = require('../conf/const');
 
 const { dateFormat } = require('../util/dt');
 
@@ -24,6 +24,22 @@ function _formatUserPicture(user) {
 function _formatDBTime(obj) {
   obj.createdAtFormat = dateFormat(obj.createdAt);
   obj.updatedAtFormat = dateFormat(obj.updatedAt);
+  return obj;
+}
+
+/**
+ * 格式化对象内容
+ * @param {Object} obj 微博信息
+ */
+function _formatContent(obj) {
+  console.log('--------------', obj.content);
+  obj.contentFormat = obj.content;
+  obj.contentFormat = obj.contentFormat.replace(
+    REG_FOR_AT_WHO,
+    (matchStr, nickName, userName) => {
+      return `<a href='/profile/${userName}'>@${nickName}</a>`;
+    }
+  );
   return obj;
 }
 
@@ -51,10 +67,13 @@ function formatBlog(list) {
     return list;
   }
   if (Array.isArray(list)) {
-    return list.map(_formatDBTime);
+    return list.map(_formatDBTime).map(_formatContent);
   }
   // 单个对象
-  return _formatDBTime(list);
+  let result = list;
+  result = _formatDBTime(result);
+  result = _formatContent(result);
+  return result;
 }
 
 module.exports = {

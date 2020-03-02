@@ -15,6 +15,7 @@ const {
 const userValidate = require('../../validator/user');
 const { getValidator } = require('../../middlewares/validator');
 const { loginCheck } = require('../../middlewares/loginCheck');
+const { getFollowers } = require('../../controller/user-relation');
 
 router.prefix('/api/user');
 
@@ -75,6 +76,16 @@ router.patch(
 
 router.post('/logout', loginCheck, async (ctx, next) => {
   ctx.body = await logout(ctx);
+});
+
+// 获取at列表
+
+router.get('/getAtList', loginCheck, async (ctx, next) => {
+  const { id: userId } = ctx.session.userInfo;
+  const result = await getFollowers(userId);
+  const { followersList } = result.data;
+  const list = followersList.map(user => `${user.nickName} - ${user.userName}`);
+  ctx.body = list;
 });
 
 module.exports = router;
