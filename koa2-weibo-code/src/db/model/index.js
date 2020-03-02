@@ -6,6 +6,7 @@
 const User = require('./User');
 const Blog = require('./Blog');
 const UserRelation = require('./UserRelation');
+const AtRelation = require('./AtRelation');
 
 // 关联外键 关系：多对一的关系 多个博客属于一个user
 
@@ -26,8 +27,13 @@ Blog.belongsTo(UserRelation, {
   foreignKey: 'userId',
   targetKey: 'followerId'
 });
+
+Blog.hasMany(AtRelation, {
+  foreignKey: 'blogId'
+});
 module.exports = {
   User,
   Blog,
-  UserRelation
+  UserRelation,
+  AtRelation
 };
