@@ -15,6 +15,8 @@ const { getFans, getFollowers } = require('../../controller/user-relation');
 
 const { getHomeBlogList } = require('../../controller/blog-home');
 
+const { getAtMeCount, getAtMeBlogList } = require('../../controller/blog-at');
+
 router.get('/', loginRedirect, async (ctx, next) => {
   const userInfo = ctx.session.userInfo;
   const { id: userId } = userInfo;
@@ -32,8 +34,8 @@ router.get('/', loginRedirect, async (ctx, next) => {
   const { followersCount, followersList } = followersResult.data;
 
   // 获取 @ 数量
-  // const atCountResult = await getAtMeCount(userId);
-  // const { count: atCount } = atCountResult.data;
+  const atCountResult = await getAtMeCount(userId);
+  const { count: atCount } = atCountResult.data;
 
   await ctx.render('index', {
     userData: {
@@ -46,7 +48,7 @@ router.get('/', loginRedirect, async (ctx, next) => {
         count: followersCount,
         list: followersList
       },
-      atCount: 0
+      atCount
     },
     blogData: {
       isEmpty,
@@ -110,6 +112,29 @@ router.get('/square', loginRedirect, async (ctx, next) => {
   const { isEmpty, blogList, pageSize, pageIndex, count } = result.data || {};
 
   await ctx.render('square', {
+    blogData: {
+      isEmpty,
+      blogList,
+      pageSize,
+      pageIndex,
+      count
+    }
+  });
+});
+
+// 广场
+router.get('/at-me', loginRedirect, async (ctx, next) => {
+  const { id: userId } = ctx.session.userInfo;
+  // 获取 @ 数量
+  const atCountResult = await getAtMeCount(userId);
+  const { count: atCount } = atCountResult.data;
+
+  // 获取第一页数据
+  const result = await getAtMeBlogList(userId);
+  const { isEmpty, blogList, pageSize, pageIndex, count } = result.data;
+
+  await ctx.render('atMe', {
+    atCount,
     blogData: {
       isEmpty,
       blogList,

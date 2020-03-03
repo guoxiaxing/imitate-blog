@@ -32,7 +32,6 @@ function _formatDBTime(obj) {
  * @param {Object} obj 微博信息
  */
 function _formatContent(obj) {
-  console.log('--------------', obj.content);
   obj.contentFormat = obj.content;
   obj.contentFormat = obj.contentFormat.replace(
     REG_FOR_AT_WHO,
