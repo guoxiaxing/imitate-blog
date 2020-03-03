@@ -15,7 +15,11 @@ const { getFans, getFollowers } = require('../../controller/user-relation');
 
 const { getHomeBlogList } = require('../../controller/blog-home');
 
-const { getAtMeCount, getAtMeBlogList } = require('../../controller/blog-at');
+const {
+  getAtMeCount,
+  getAtMeBlogList,
+  markAsRead
+} = require('../../controller/blog-at');
 
 router.get('/', loginRedirect, async (ctx, next) => {
   const userInfo = ctx.session.userInfo;
@@ -143,6 +147,10 @@ router.get('/at-me', loginRedirect, async (ctx, next) => {
       count
     }
   });
+  // 标记为已读
+  if (atCount > 0) {
+    await markAsRead(userId);
+  }
 });
 
 module.exports = router;

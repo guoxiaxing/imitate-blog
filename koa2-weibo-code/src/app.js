@@ -11,6 +11,7 @@ const redisStore = require('koa-redis');
 const koaStatic = require('koa-static');
 const { REDIS_CONF } = require('./conf/db');
 
+const atAPIRouter = require('./routes/api/blog-at');
 const blogViewRouter = require('./routes/view/blog');
 const user = require('./routes/view/user');
 const userAPIRouter = require('./routes/api/user');
@@ -74,6 +75,7 @@ app.use(
 
 // routes
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods());
+app.use(atAPIRouter.routes(), atAPIRouter.allowedMethods());
 app.use(user.routes(), user.allowedMethods());
 app.use(BlogHomeAPIRouter.routes(), BlogHomeAPIRouter.allowedMethods());
 app.use(profileAPIRouter.routes(), profileAPIRouter.allowedMethods());

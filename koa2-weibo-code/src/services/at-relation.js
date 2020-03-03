@@ -64,8 +64,32 @@ async function getAtUserBlogList({ userId, pageIndex, pageSize = 10 }) {
   };
 }
 
+/**
+ * 标记为已读
+ * @param {Object} param0 要更新的内容
+ * @param {Object} param1 更新的条件
+ */
+async function updateAtRelation({ newIsRead }, { userId, isRead }) {
+  const updateData = {};
+  if (newIsRead) {
+    updateData.isRead = newIsRead;
+  }
+  const whereData = {};
+  if (userId) {
+    whereData.userId = userId;
+  }
+  if (isRead) {
+    whereData.isRead = isRead;
+  }
+  const result = AtRelation.update(updateData, {
+    where: whereData
+  });
+  return result[0] > 0;
+}
+
 module.exports = {
   createAtRelation,
   getAtRelationCount,
-  getAtUserBlogList
+  getAtUserBlogList,
+  updateAtRelation
 };
