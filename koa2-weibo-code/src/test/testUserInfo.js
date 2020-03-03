@@ -9,5 +9,5 @@ module.exports = {
   L_ID: 2,
   L_USERNAME: 'lisi',
   L_COOKIE:
-    'weibo.id=i3avlBFkfibBI68p4If61IX11K3Ahn8B; weibo.id.sig=-eurzjOI3eZh37z3xQuf6Z0tgrA'
+    'weibo.id=8tb1QyoP9-bd5K_SdX_yOJz-nMAruUdS; weibo.id.sig=Phpt4t10Y3D3c6I0-lioqvx6GY8'
 };
