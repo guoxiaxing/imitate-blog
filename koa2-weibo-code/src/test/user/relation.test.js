@@ -17,7 +17,7 @@ const {
 } = require('../testUserInfo');
 
 test('无论如何，先取消关注，应该成功', async () => {
-  const result = server
+  const result = await server
     .post('/api/profile/unFollow')
     .send({
       userId: L_ID
@@ -27,7 +27,7 @@ test('无论如何，先取消关注，应该成功', async () => {
 });
 
 test('添加关注，张三关注李四，应该成功', async () => {
-  const result = server
+  const result = await server
     .post('/api/profile/follow')
     .send({
       userId: 2
@@ -69,7 +69,7 @@ test('获取张三的 at 列表，应该有李四', async () => {
 });
 
 test('张三取消关注李四，应该成功', async () => {
-  const result = server
+  const result = await server
     .post('/api/profile/unFollow')
     .send({
       userId: 2
